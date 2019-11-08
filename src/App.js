@@ -1,26 +1,31 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function fetchPokemon() {
+  return fetch(
+    'https://pokeapi.co/api/v2/pokemon?limit=964',
+  ).then(x => x.json());
 }
+
+function App() {
+
+  const [pokemon, setData] = useState([]);
+
+  useEffect(() => {
+    fetchPokemon().then(({results}) => {
+      setData(results);
+    });
+  });
+
+  return <div className="App poke-container">
+      { pokemon.map((poke, pokeIndex) => <div className="pokemon-box nes-container with-title">
+        <p class="title">{poke.name}</p>
+        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeIndex + 1}.png`} />
+      </div>) }  
+    </div>;
+
+}
+
 
 export default App;
